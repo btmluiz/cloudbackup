@@ -1,0 +1,17 @@
+{
+  "titles_screen.buttons.cloud": "Cloud options",
+  "cloudbackup.title": "Cloud Backup Settings",
+  "cloudbackup.buttons.connection": "Connect",
+  "cloud_screen.location": "Location",
+  "cloud_locations.google_drive": "Google Drive",
+  "cloud_locations.dropbox": "Dropbox",
+  "cloud_locations.aws_s3": "AWS S3",
+  "cloud_locations.google_storage": "Google Storage",
+  "cloud_locations.open_browser": "Open browser",
+  "gd_screen.title": "Google Drive connection",
+  "backup_started": "Backup started",
+  "backup_end": "Backup end",
+  "backup_complete": "Backup complete",
+  "backup_failed": "Backup failed",
+  "backup_cancelled": "Backup cancelled"
+}
