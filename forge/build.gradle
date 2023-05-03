@@ -1,5 +1,6 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
+    id "me.shedaniel.unified-publishing" version "0.1.+"
 }
 
 architectury {
@@ -45,6 +46,16 @@ remapJar {
     classifier null
 }
 
+task renameJarForPublication(type: Zip, dependsOn: remapJar) {
+    from remapJar.archiveFile.map { zipTree(it) }
+    extension "jar"
+    metadataCharset "UTF-8"
+    destinationDirectory = base.libsDirectory
+    classifier project.name
+}
+
+assemble.dependsOn renameJarForPublication
+
 jar {
     classifier "dev"
 }
@@ -71,6 +82,23 @@ publishing {
 
     // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
     repositories {
-        // Add repositories to publish to here.
+    }
+}
+
+unifiedPublishing {
+    project {
+        displayName = "[Forge $rootProject.supported_version] v$project.version"
+        releaseType = "${rootProject.artifact_type}"
+        gameVersions = ["${rootProject.supported_version}"]
+        gameLoaders = ["forge"]
+        mainPublication renameJarForPublication
+
+        var CF_API_KEY = project.findProperty("CF_API_KEY") ?: System.getenv("CF_API_KEY")
+        if (CF_API_KEY != null) {
+            curseforge {
+                apiKey = CF_API_KEY
+                id = rootProject.curseforge_id
+            }
+        }
     }
 }

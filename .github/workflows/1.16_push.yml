@@ -44,6 +44,9 @@ jobs:
             !**/*-shadow.jar
             !**/*-transformProduction.jar
             !**/testmod*/
-      - name: Publish
-        envs:
-          GITHUB_TOKEN: ${{ github.token }}
+      - name: Release to CurseForge
+        uses: gradle/gradle-build-action@v2
+        env:
+          CF_API_KEY: ${{ secrets.CF_API_KEY }}
+        with:
+          arguments: publish publishUnified --stacktrace --no-daemon
