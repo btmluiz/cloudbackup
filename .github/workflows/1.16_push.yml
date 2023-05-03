@@ -25,13 +25,12 @@ jobs:
           echo ${{ secrets.GOOGLE_CREDENTIALS }} > $GITHUB_WORKSPACE/common/src/main/resources/credentials.json
       - name: Setup and build gradle
         uses: gradle/gradle-build-action@v2
-        with:
-          arguments: build --stacktrace --no-daemon
+
       - name: Setting mod version
         run: |
           cat $GITHUB_WORKSPACE/gradle.properties | grep ^archives_base_name= >> $GITHUB_ENV
           cat $GITHUB_WORKSPACE/gradle.properties | grep ^minecraft_version= >> $GITHUB_ENV
-          cat $GITHUB_WORKSPACE/gradle.properties | grep ^version= >> $GITHUB_ENV
+          cat $GITHUB_WORKSPACE/gradle.properties | grep ^mod_version= >> $GITHUB_ENV
       - name: Create package name
         run: echo "package_name=[$minecraft_version] $archives_base_name-$version.${{ github.run_number }}" >> $GITHUB_ENV
       - uses: actions/upload-artifact@v2
