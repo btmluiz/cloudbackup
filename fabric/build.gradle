@@ -84,7 +84,7 @@ publishing {
 
 unifiedPublishing {
     project {
-        displayName = "[Forge $rootProject.supported_version] v$project.version"
+        displayName = "[Fabric $rootProject.supported_version] v$project.version"
         releaseType = "${rootProject.artifact_type}"
         gameVersions = ["${rootProject.supported_version}"]
         gameLoaders = ["forge"]
@@ -95,6 +95,7 @@ unifiedPublishing {
             curseforge {
                 token = CF_API_KEY
                 id = rootProject.curseforge_id
+                gameVersions.addAll("Java 17", "Client")
             }
         }
     }
