@@ -1,6 +1,6 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
-    id "me.shedaniel.unified-publishing" version "0.1.+"
+    id "me.shedaniel.unified-publishing"
 }
 
 architectury {
@@ -94,7 +94,7 @@ unifiedPublishing {
         var CF_API_KEY = project.findProperty("CF_API_KEY") ?: System.getenv("CF_API_KEY")
         if (CF_API_KEY != null) {
             curseforge {
-                apiKey = CF_API_KEY
+                token = CF_API_KEY
                 id = rootProject.curseforge_id
             }
         }
