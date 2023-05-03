@@ -1,8 +1,10 @@
 package dev.nardole.cloudbackup.threads;
 
 import dev.nardole.cloudbackup.CloudBackup;
+import dev.nardole.cloudbackup.config.MainConfig;
 import dev.nardole.cloudbackup.data.BackupData;
-import dev.nardole.cloudbackup.storages.GoogleDriveStorage;
+import dev.nardole.cloudbackup.storages.CloudStorage;
+import dev.nardole.cloudbackup.storages.IStorage;
 import dev.nardole.cloudbackup.util.FileUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.DefaultUncaughtExceptionHandler;
@@ -18,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.text.SimpleDateFormat;
@@ -91,41 +94,42 @@ public class BackupThread extends Thread {
 
     @Override
     public void run() {
-        try {
-            this.deleteFiles();
+        if (CloudBackup.getConfig().enableBackup) {
+            try {
+                this.deleteFiles();
 
-            Files.createDirectories(CloudBackup.getConfig().getOutputPath());
-            long start = System.currentTimeMillis();
-            this.broadcast("backup_started", Style.EMPTY.withColor(ChatFormatting.GOLD));
-            long size = this.makeWorldBackup();
-            long end = System.currentTimeMillis();
-            String time = Timer.getTimer(end - start);
-            this.broadcast("backup_finished", Style.EMPTY.withColor(ChatFormatting.GOLD), time);
-        } catch (IOException e) {
-            e.printStackTrace();
+                Files.createDirectories(CloudBackup.getConfig().getOutputPath());
+                long start = System.currentTimeMillis();
+                this.broadcast("backup_started", Style.EMPTY.withColor(ChatFormatting.GOLD));
+                this.makeWorldBackup();
+                long end = System.currentTimeMillis();
+                String time = Timer.getTimer(end - start);
+                this.broadcast("backup_finished", Style.EMPTY.withColor(ChatFormatting.GOLD), time);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            this.broadcast("backup_disabled", Style.EMPTY.withColor(ChatFormatting.RED));
         }
     }
 
     private void broadcast(String message, Style style, Object... parameters) {
         if (!this.quiet) {
-            this.server.execute(() -> {
-                this.server.getPlayerList().getPlayers().forEach(player -> {
-                    if (this.server.isSingleplayer() || player.hasPermissions(2)) {
-                        player.sendMessage(BackupThread.component(player, message, parameters).withStyle(style), player.getUUID());
-                    }
-                });
-            });
+            this.server.execute(() -> this.server.getPlayerList().getPlayers().forEach(player -> {
+                if (this.server.isSingleplayer() || player.hasPermissions(2)) {
+                    player.sendMessage(BackupThread.component(player, message, parameters).withStyle(style), player.getUUID());
+                }
+            }));
         }
     }
 
     public static MutableComponent component(ServerPlayer player, String key, Object... parameters) {
-        return new TranslatableComponent(key, parameters);
+        return new TranslatableComponent("options.generic_value", new TranslatableComponent("cloudbackup.chat_prefix").withStyle(Style.EMPTY.withColor(ChatFormatting.DARK_PURPLE)), new TranslatableComponent(key, parameters));
     }
 
     private long makeWorldBackup() throws IOException {
         String fileName = this.server.getWorldData().getLevelName() + "_" + LocalDateTime.now().format(FORMATTER);
         Path path = CloudBackup.getConfig().getOutputPath();
-        LOGGER.info("File name: " + fileName + " Path: " + path);
 
         try {
             Files.createDirectories(Files.exists(path) ? path.toAbsolutePath() : path);
@@ -138,12 +142,9 @@ public class BackupThread extends Thread {
 
         zipStream.setLevel(0);
 
+        Path levelName = Paths.get(this.server.getWorldData().getLevelName());
+        Path levelPath = this.server.getWorldPath(LevelResource.ROOT).toAbsolutePath();
         try {
-            Path levelName = Paths.get(this.server.getWorldData().getLevelName());
-            Path levelPath = this.server.getWorldPath(LevelResource.ROOT).toAbsolutePath();
-
-            LOGGER.info(levelPath);
-
             Files.walkFileTree(levelPath, new SimpleFileVisitor<Path>() {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
@@ -173,11 +174,27 @@ public class BackupThread extends Thread {
 
         zipStream.close();
 
-        GoogleDriveStorage googleDriveStorage = new GoogleDriveStorage();
-
-        googleDriveStorage.backupFile(fileName + ".zip", outputFile.toFile());
+        this.tryUploadBackup(fileName, server.getWorldPath(LevelResource.ROOT).getParent().getFileName().toString(), outputFile);
 
         return Files.size(outputFile);
+    }
+
+    private void tryUploadBackup(String fileName, String worldName, Path outputFile) {
+        MainConfig config = CloudBackup.getConfig();
+
+        for (CloudStorage storage: CloudStorage.values()) {
+            if (config.getStorageConfig(storage).enabled) {
+                try {
+                    IStorage iStorage = storage.getStorage().getDeclaredConstructor().newInstance();
+
+                    iStorage.backupFile(fileName, worldName, outputFile.toFile());
+                } catch (InvocationTargetException | InstantiationException | IllegalAccessException |
+                         NoSuchMethodException | NullPointerException | IOException e) {
+                    this.broadcast("cloudbackup.cannot_upload_backup", Style.EMPTY.withColor(ChatFormatting.RED), storage.getDisplayName());
+                    throw new RuntimeException(e);
+                }
+            }
+        }
     }
 
     private static class Timer {

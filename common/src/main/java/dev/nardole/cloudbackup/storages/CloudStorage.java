@@ -2,35 +2,27 @@ package dev.nardole.cloudbackup.storages;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import org.jetbrains.annotations.NotNull;
 
 public enum CloudStorage {
-    GOOGLE_DRIVE("google_drive", "google_drive"),
-    DROPBOX("dropbox", "dropbox"),
-    AWS_S3("aws_s3", "aws_s3"),
-    GOOGLE_STORAGE("google_storage", "google_storage");
-    private final String id;
-    private final String key;
+    GOOGLE_DRIVE("google_drive", GoogleDriveStorage.class);
+//    DROPBOX("dropbox", DropboxStorage.class);
+    private final String name;
+    private final Class<? extends IStorage> storage;
 
-    private CloudStorage(String id, String key) {
-        this.id = id;
-        this.key = key;
+    CloudStorage(String name, Class<? extends IStorage> storage) {
+        this.name = name;
+        this.storage = storage;
     }
 
-    public String getId() {
-        return id;
+    public String getName() {
+        return name;
     }
 
-    public String getKey() {
-        return key;
+    public Class<? extends IStorage> getStorage() {
+        return storage;
     }
 
     public Component getDisplayName() {
-        return new TranslatableComponent("cloud_locations." + this.key);
-    }
-
-    @NotNull
-    public String getSerializedName() {
-        return this.key;
+        return new TranslatableComponent("cloudbackup.storage." + this.name);
     }
 }

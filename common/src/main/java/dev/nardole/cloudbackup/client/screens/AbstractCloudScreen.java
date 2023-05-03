@@ -1,4 +1,4 @@
-package dev.nardole.cloudbackup.client;
+package dev.nardole.cloudbackup.client.screens;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.Screen;
@@ -27,5 +27,10 @@ public abstract class AbstractCloudScreen extends Screen {
         if (this.minecraft != null) {
             this.minecraft.setScreen(this.lastScreen);
         }
+    }
+
+    @Override
+    public void onClose() {
+        this.popScreen();
     }
 }

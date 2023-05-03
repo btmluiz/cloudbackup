@@ -4,5 +4,5 @@ import java.io.File;
 import java.io.IOException;
 
 public interface IStorage {
-    public void backupFile(String fileName, File file) throws IOException;
+    void backupFile(String fileName, String worldName, File file) throws IOException;
 }
