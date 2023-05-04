@@ -98,7 +98,7 @@ unifiedPublishing {
             curseforge {
                 token = CF_API_KEY
                 id = rootProject.curseforge_id
-                gameVersions.addAll("Java 17", "Client")
+                gameVersions.addAll("Java 16", "Forge")
             }
         }
     }

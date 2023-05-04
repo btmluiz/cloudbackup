@@ -18,9 +18,8 @@ configurations {
 
 dependencies {
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
-    modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
-    // Remove the next line if you don't want to depend on the API
-    modApi "me.shedaniel:architectury-fabric:${rootProject.architectury_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
+    modImplementation "me.shedaniel:architectury-fabric:${rootProject.architectury_version}"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
@@ -45,7 +44,8 @@ remapJar {
     classifier null
 }
 
-task renameJarForPublication(type: Zip, dependsOn: remapJar) {
+tasks.register('renameJarForPublication', Zip) {
+    dependsOn remapJar
     from remapJar.archiveFile.map { zipTree(it) }
     extension "jar"
     metadataCharset "UTF-8"
@@ -88,6 +88,7 @@ unifiedPublishing {
         releaseType = "${rootProject.artifact_type}"
         gameVersions = ["${rootProject.supported_version}"]
         gameLoaders = ["forge"]
+
         mainPublication renameJarForPublication
 
         var CF_API_KEY = project.findProperty("CF_API_KEY") ?: System.getenv("CF_API_KEY")
@@ -95,7 +96,7 @@ unifiedPublishing {
             curseforge {
                 token = CF_API_KEY
                 id = rootProject.curseforge_id
-                gameVersions.addAll("Java 17", "Client")
+                gameVersions.addAll("Java 16", "Fabric")
             }
         }
     }
