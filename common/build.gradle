@@ -12,16 +12,3 @@ dependencies {
     implementation 'com.dropbox.core:dropbox-core-sdk:5.4.4'
     implementation 'org.yaml:snakeyaml:2.0'
 }
-
-publishing {
-    publications {
-        mavenCommon(MavenPublication) {
-            artifactId = rootProject.archives_base_name
-            from components.java
-        }
-    }
-
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-    }
-}
