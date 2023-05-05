@@ -12,7 +12,10 @@ public class MainConfig implements Cloneable {
 
     public boolean autoBackup = true;
 
-    public int backupInterval = 3600;
+    /**
+     * Interval in minutes
+     */
+    public int backupInterval = 30;
 
     public boolean backupWhenExit = true;
 

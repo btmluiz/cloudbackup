@@ -15,7 +15,7 @@ public class BackupData extends SavedData {
 
     private long lastFullBackup;
 
-    private boolean paused;
+    private boolean paused = false;
 
     public BackupData(String string) {
         super(string);
