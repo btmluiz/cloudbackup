@@ -17,27 +17,16 @@ public class BackupData extends SavedData {
 
     private boolean paused;
 
-    public BackupData(String string) {
-        super(string);
-    }
-
-    public  BackupData() {
-        this(NAME);
-    }
-
-    public static BackupData get(ServerLevel serverLevel) {
-        return BackupData.get(serverLevel.getServer());
-    }
-
     public static BackupData get(MinecraftServer server) {
-        return server.overworld().getDataStorage().computeIfAbsent(BackupData::new, NAME);
+        return server.overworld().getDataStorage().computeIfAbsent(BackupData::load, BackupData::new, NAME);
     }
 
-    @Override
-    public void load(CompoundTag nbt) {
-        this.lastSaved = nbt.getLong("lastSaved");
-        this.lastFullBackup = nbt.getLong("lastFullBackup");
-        this.paused = nbt.getBoolean("paused");
+    public static BackupData load(CompoundTag nbt) {
+        BackupData backupData = new BackupData();
+        backupData.lastSaved = nbt.getLong("lastSaved");
+        backupData.lastFullBackup = nbt.getLong("lastFullBackup");
+        backupData.paused = nbt.getBoolean("paused");
+        return backupData;
     }
 
     @NotNull

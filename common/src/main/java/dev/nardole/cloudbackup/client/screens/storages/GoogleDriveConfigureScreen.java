@@ -54,7 +54,7 @@ public class GoogleDriveConfigureScreen extends AbstractStorageConfigureScreen {
     }
 
     protected void init() {
-        connectButton = addButton(new Button(width / 2 - 155, height / 6 + 48 - 6, 150, 20, new TranslatableComponent("cloudbackup.storage.open_browser"), (button -> {
+        connectButton = addRenderableWidget(new Button(width / 2 - 155, height / 6 + 48 - 6, 150, 20, new TranslatableComponent("cloudbackup.storage.open_browser"), (button -> {
             try {
                 String driveUrl = googleDrive.getBrowserUrl();
 
@@ -67,7 +67,7 @@ public class GoogleDriveConfigureScreen extends AbstractStorageConfigureScreen {
         })));
 
         // Logout button
-        disconnectButton = addButton(new Button(width / 2 - 155 + 160, height / 6 + 48 - 6, 150, 20, new TranslatableComponent("cloudbackup.storage.disconnect"), (button -> {
+        disconnectButton = addRenderableWidget(new Button(width / 2 - 155 + 160, height / 6 + 48 - 6, 150, 20, new TranslatableComponent("cloudbackup.storage.disconnect"), (button -> {
             try {
                 googleDrive.disconnect();
                 authUser = null;
@@ -81,12 +81,12 @@ public class GoogleDriveConfigureScreen extends AbstractStorageConfigureScreen {
         uploadFolderEditBox.setValue(config.googleDrive.uploadDir);
         uploadFolderEditBox.setResponder(string -> config.googleDrive.uploadDir = string);
 
-        this.children.add(uploadFolderEditBox);
+        addWidget(uploadFolderEditBox);
 
         // Make world folder button
-        makeWorldFolderButton = addButton(new Button(width / 2 - 155 + 160, height / 6 + 72 - 6, 150, 20, new TranslatableComponent("cloudbackup.storage.make_world_folder"), (button -> config.googleDrive.makeWorldDir = !config.googleDrive.makeWorldDir)));
+        makeWorldFolderButton = addRenderableWidget(new Button(width / 2 - 155 + 160, height / 6 + 72 - 6, 150, 20, new TranslatableComponent("cloudbackup.storage.make_world_folder"), (button -> config.googleDrive.makeWorldDir = !config.googleDrive.makeWorldDir)));
 
-        addButton(new Button(this.width / 2 - 100, this.height / 6 + 168, 200, 20, CommonComponents.GUI_DONE, button -> popScreen()));
+        addRenderableWidget(new Button(this.width / 2 - 100, this.height / 6 + 168, 200, 20, CommonComponents.GUI_DONE, button -> popScreen()));
     }
 
     @Override

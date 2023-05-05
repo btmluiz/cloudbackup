@@ -3,6 +3,7 @@ package dev.nardole.cloudbackup.mixin.client.gui.screens;
 import dev.nardole.cloudbackup.client.screens.CloudScreen;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.OptionsScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -25,11 +26,13 @@ public abstract class OptionsScreenMixin extends Screen {
         int j = this.height / 7;
         int i = j - k;
 
-        for (AbstractWidget button : this.buttons) {
-            button.y -= i;
+        for (GuiEventListener button : this.children()) {
+            if (button instanceof AbstractWidget) {
+                ((AbstractWidget) button).y -= i;
+            }
         }
 
-        this.addButton(new Button(this.width / 2 - 155, this.height / 6 + 144 - 6 - i, 150, 20, CLOUD_BACKUP, button -> {
+        this.addRenderableWidget(new Button(this.width / 2 - 155, this.height / 6 + 144 - 6 - i, 150, 20, CLOUD_BACKUP, button -> {
             assert this.minecraft != null;
             this.minecraft.setScreen(new CloudScreen(this));
         }));

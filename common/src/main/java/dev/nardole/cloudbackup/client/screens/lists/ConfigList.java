@@ -11,6 +11,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ContainerObjectSelectionList;
 import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
@@ -88,6 +89,11 @@ public class ConfigList extends ContainerObjectSelectionList<ConfigList.Entry> {
         protected Button button2;
 
         public ButtonRowEntry() {
+        }
+
+        @Override
+        public List<? extends NarratableEntry> narratables() {
+            return ImmutableList.of(this.button1, this.button2);
         }
 
         public ButtonRowEntry(Button button1, Button button2) {
@@ -171,6 +177,11 @@ public class ConfigList extends ContainerObjectSelectionList<ConfigList.Entry> {
         }
 
         public List<? extends GuiEventListener> children() {
+            return Collections.emptyList();
+        }
+
+        @Override
+        public List<? extends NarratableEntry> narratables() {
             return Collections.emptyList();
         }
     }

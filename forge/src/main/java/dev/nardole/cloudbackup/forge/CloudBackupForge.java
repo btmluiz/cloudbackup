@@ -1,7 +1,7 @@
 package dev.nardole.cloudbackup.forge;
 
+import dev.architectury.platform.forge.EventBuses;
 import dev.nardole.cloudbackup.CloudBackup;
-import me.shedaniel.architectury.platform.forge.EventBuses;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 

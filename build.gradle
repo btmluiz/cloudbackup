@@ -20,7 +20,6 @@ subprojects {
         mappings loom.officialMojangMappings()
 
         minecraftLibraries 'com.google.auth:google-auth-library-oauth2-http:1.11.0'
-        minecraftLibraries 'com.google.code.gson:gson:2.9.1'
         minecraftLibraries 'com.google.api-client:google-api-client:2.0.0'
         minecraftLibraries 'com.google.oauth-client:google-oauth-client-jetty:1.34.1'
         minecraftLibraries 'com.google.apis:google-api-services-drive:v3-rev20220815-2.0.0'

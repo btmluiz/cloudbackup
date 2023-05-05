@@ -1,10 +1,10 @@
 package dev.nardole.cloudbackup;
 
+import dev.architectury.event.events.common.CommandRegistrationEvent;
+import dev.architectury.event.events.common.LifecycleEvent;
 import dev.nardole.cloudbackup.config.ConfigHandler;
 import dev.nardole.cloudbackup.config.MainConfig;
 import dev.nardole.cloudbackup.threads.BackupThread;
-import me.shedaniel.architectury.event.events.CommandRegistrationEvent;
-import me.shedaniel.architectury.event.events.LifecycleEvent;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.MinecraftServer;
 import org.apache.logging.log4j.LogManager;
