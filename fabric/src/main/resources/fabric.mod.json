@@ -3,7 +3,7 @@
   "id": "cloudbackup",
   "version": "${version}",
   "name": "cloudbackup",
-  "description": "",
+  "description": "Automatically back up your Minecraft world and upload it to cloud services like Google Drive and Dropbox with CloudBackup. This mod features customizable settings for enabling/disabling backups and automatic uploads. Keep your Minecraft world safe and secure with CloudBackup.",
   "authors": [
     "Luiz Braga"
   ],
