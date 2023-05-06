@@ -10,7 +10,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class CloudScreen extends Screen {
 
@@ -44,7 +43,7 @@ public class CloudScreen extends Screen {
         }));
     }
 
-    public void render(@NonNull PoseStack poseStack, int i, int j, float f) {
+    public void render(PoseStack poseStack, int i, int j, float f) {
         this.renderBackground(poseStack);
         this.configList.render(poseStack, i, j, f);
         drawCenteredString(poseStack, this.font, this.title, this.width / 2, 20, -1);

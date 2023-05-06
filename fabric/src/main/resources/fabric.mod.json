@@ -4,18 +4,29 @@
   "version": "${version}",
   "name": "cloudbackup",
   "description": "",
-  "authors": [],
-  "contact": {},
-  "license": "All Rights Reserved",
+  "authors": [
+    "Luiz Braga"
+  ],
+  "contact": {
+    "email": "contato@nardole.dev",
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/cloudbackup",
+    "issues": "https://github.com/btmluiz/cloudbackup/issues"
+  },
+  "license": "GNU GPL 3.0",
   "icon": "icon.png",
   "environment": "client",
-  "entrypoints": {},
+  "entrypoints": {
+    "main": [
+      "dev.nardole.cloudbackup.fabric.CloudBackupFabric"
+    ]
+  },
   "mixins": [
     "cloudbackup.mixins.json",
     "cloudbackup-common.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.13.1",
-    "minecraft": ">=1.16.5"
+    "fabricloader": ">=${fabric_loader_version}",
+    "minecraft": "~${minecraft_version}",
+    "fabric": "*"
   }
 }

@@ -1,6 +1,5 @@
 modLoader = "javafml"
 loaderVersion = "[36,)"
-# Review your options at https://choosealicense.com/. All rights reserved is the default copyright stance, and is thus the default here.
 license = "GNU GPL 3.0"
 issueTrackerURL = "https://github.com/btmluiz/cloudbackup/issues"
 [[mods]]
@@ -8,7 +7,7 @@ modId = "cloudbackup"
 version = "${version}"
 displayName = "cloudbackup"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/cloudbackup"
-logoFile = "icon.png" #optional
+logoFile = "icon.png"
 authors="Luiz Braga"
 #displayTest="MATCH_VERSION" # MATCH_VERSION is the default if nothing is specified (#optional)
 description = '''
