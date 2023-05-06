@@ -11,7 +11,9 @@ logoFile = "icon.png"
 authors="Luiz Braga"
 #displayTest="MATCH_VERSION" # MATCH_VERSION is the default if nothing is specified (#optional)
 description = '''
-
+Automatically back up your Minecraft world and upload it to cloud services like Google Drive and Dropbox with CloudBackup.
+This mod features customizable settings for enabling/disabling backups and automatic uploads.
+Keep your Minecraft world safe and secure with CloudBackup.
 '''
 [[dependencies.cloudbackup]]
 modId = "forge"
