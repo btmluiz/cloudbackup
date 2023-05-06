@@ -51,6 +51,13 @@ public class RegisterServerEvent {
                             MinecraftServer server = context.getSource().getServer();
                             BackupThread.createBackup(server, false);
                             return 1;
+                        }))
+                .then(Commands.literal("lastBackup")
+                        .executes(context -> {
+                            MinecraftServer server = context.getSource().getServer();
+
+                            context.getSource().sendSuccess(BackupThread.getLastBackupDateFormatted(server), false);
+                            return 1;
                         })));
     }
 }

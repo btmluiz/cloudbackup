@@ -28,5 +28,6 @@
   "cloudbackup.storage.cancel": "Cancel",
   "cloudbackup.storage.upload_folder": "Upload folder",
   "cloudbackup.storage.upload_folder.description": "Folder where backups will be uploaded",
-  "cloudbackup.storage.make_world_folder": "Make world folder"
+  "cloudbackup.storage.make_world_folder": "Make world folder",
+  "cloudbackup.last_backup": "Last backup was %s"
 }

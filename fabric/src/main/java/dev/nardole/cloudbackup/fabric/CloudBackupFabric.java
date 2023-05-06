@@ -33,11 +33,20 @@ public class CloudBackupFabric implements ModInitializer {
             }
         });
 
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> Commands.literal("cloudbackup")
-                .executes(context -> {
-                    MinecraftServer server = context.getSource().getServer();
-                    BackupThread.createBackup(server, false);
-                    return 1;
-                }));
+        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(Commands.literal("cloudbackup")
+                .requires(source -> source.getServer().isSingleplayer() || source.hasPermission(2))
+                .then(Commands.literal("run")
+                        .executes(context -> {
+                            MinecraftServer server = context.getSource().getServer();
+                            BackupThread.createBackup(server, false);
+                            return 1;
+                        }))
+                .then(Commands.literal("lastBackup")
+                        .executes(context -> {
+                            MinecraftServer server = context.getSource().getServer();
+
+                            context.getSource().sendSuccess(BackupThread.getLastBackupDateFormatted(server), false);
+                            return 1;
+                        }))));
     }
 }

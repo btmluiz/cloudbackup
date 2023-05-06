@@ -8,11 +8,11 @@ import dev.nardole.cloudbackup.storages.IStorage;
 import dev.nardole.cloudbackup.util.FileUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.DefaultUncaughtExceptionHandler;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.storage.LevelResource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -30,6 +31,8 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.SignStyle;
 import java.time.temporal.ChronoField;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -117,17 +120,17 @@ public class BackupThread extends Thread {
         if (!this.quiet) {
             this.server.execute(() -> this.server.getPlayerList().getPlayers().forEach(player -> {
                 if (this.server.isSingleplayer() || player.hasPermissions(2)) {
-                    player.sendMessage(BackupThread.component(player, message, parameters).withStyle(style), player.getUUID());
+                    player.sendMessage(BackupThread.component(message, parameters).withStyle(style), player.getUUID());
                 }
             }));
         }
     }
 
-    public static MutableComponent component(ServerPlayer player, String key, Object... parameters) {
+    public static MutableComponent component(String key, Object... parameters) {
         return new TranslatableComponent("options.generic_value", new TranslatableComponent("cloudbackup.chat_prefix").withStyle(Style.EMPTY.withColor(ChatFormatting.DARK_PURPLE)), new TranslatableComponent(key, parameters));
     }
 
-    private long makeWorldBackup() throws IOException {
+    private void makeWorldBackup() throws IOException {
         String fileName = this.server.getWorldData().getLevelName() + "_" + LocalDateTime.now().format(FORMATTER);
         Path path = CloudBackup.getConfig().getOutputPath();
 
@@ -175,8 +178,6 @@ public class BackupThread extends Thread {
         zipStream.close();
 
         this.tryUploadBackup(fileName, server.getWorldPath(LevelResource.ROOT).getParent().getFileName().toString(), outputFile);
-
-        return Files.size(outputFile);
     }
 
     private void tryUploadBackup(String fileName, String worldName, Path outputFile) {
@@ -195,6 +196,21 @@ public class BackupThread extends Thread {
                 }
             }
         }
+    }
+
+    public static Date getLastBackupDate(MinecraftServer server) {
+        BackupData backupData = BackupData.get(server);
+        return new Date(backupData.getLastSaved());
+    }
+
+    public static Component getLastBackupDateFormatted(MinecraftServer server) {
+        BackupData backupData = BackupData.get(server);
+
+        // Get the system date time format
+        DateFormat systemDateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
+        systemDateFormat.setTimeZone(TimeZone.getDefault());
+
+        return BackupThread.component("cloudbackup.last_backup", systemDateFormat.format(new Date(backupData.getLastSaved())));
     }
 
     private static class Timer {
