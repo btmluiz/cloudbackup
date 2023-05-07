@@ -18,11 +18,16 @@ configurations {
 
 dependencies {
     forge "net.minecraftforge:forge:${rootProject.forge_version}"
-    // Remove the next line if you don't want to depend on the API
-    modApi "dev.architectury:architectury-forge:${rootProject.architectury_version}"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+
+    shadowCommon 'com.google.auth:google-auth-library-oauth2-http:1.11.0'
+    shadowCommon 'com.google.api-client:google-api-client:2.0.0'
+    shadowCommon 'com.google.oauth-client:google-oauth-client-jetty:1.34.1'
+    shadowCommon 'com.google.apis:google-api-services-drive:v3-rev20220815-2.0.0'
+    shadowCommon 'com.dropbox.core:dropbox-core-sdk:5.4.4'
+    shadowCommon 'org.yaml:snakeyaml:2.0'
 }
 
 processResources {
@@ -69,19 +74,6 @@ sourcesJar {
 components.java {
     withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
         skip()
-    }
-}
-
-publishing {
-    publications {
-        mavenForge(MavenPublication) {
-            artifactId = rootProject.archives_base_name + "-" + project.name
-            from components.java
-        }
-    }
-
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
     }
 }
 

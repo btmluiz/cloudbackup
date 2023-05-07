@@ -15,7 +15,7 @@ public class BackupData extends SavedData {
 
     private long lastFullBackup;
 
-    private boolean paused;
+    private boolean paused = false;
 
     public static BackupData get(MinecraftServer server) {
         return server.overworld().getDataStorage().computeIfAbsent(BackupData::load, BackupData::new, NAME);
