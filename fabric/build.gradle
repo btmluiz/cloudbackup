@@ -1,4 +1,5 @@
 plugins {
+    id 'fabric-loom' version '1.1-SNAPSHOT'
     id "com.github.johnrengelman.shadow" version "7.1.2"
     id "me.shedaniel.unified-publishing"
 }
@@ -19,29 +20,39 @@ configurations {
 dependencies {
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
-    modImplementation "dev.architectury:architectury-fabric:${rootProject.architectury_version}"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 
-    shadowCommon 'com.google.auth:google-auth-library-oauth2-http:1.11.0'
-    shadowCommon 'com.google.api-client:google-api-client:2.0.0'
-    shadowCommon 'com.google.oauth-client:google-oauth-client-jetty:1.34.1'
-    shadowCommon 'com.google.apis:google-api-services-drive:v3-rev20220815-2.0.0'
-    shadowCommon 'com.dropbox.core:dropbox-core-sdk:5.4.4'
-    shadowCommon 'org.yaml:snakeyaml:2.0'
+    shadowCommon('com.google.auth:google-auth-library-oauth2-http:1.11.0')
+    shadowCommon('com.google.api-client:google-api-client:2.0.0')
+    shadowCommon('com.google.oauth-client:google-oauth-client-jetty:1.34.1')
+    shadowCommon('com.google.apis:google-api-services-drive:v3-rev20220815-2.0.0')
+    shadowCommon('com.dropbox.core:dropbox-core-sdk:5.4.4')
+    shadowCommon('org.yaml:snakeyaml:2.0') { transitive = false }
 }
 
 processResources {
     inputs.property "version", project.version
+    inputs.property "fabric_loader_version", rootProject.fabric_loader_version
+    inputs.property "minecraft_version", rootProject.minecraft_version
 
     filesMatching("fabric.mod.json") {
-        expand "version": project.version
+        expand "version": project.version,
+                "fabric_loader_version": rootProject.fabric_loader_version,
+                "minecraft_version": rootProject.minecraft_version
     }
 }
 
 shadowJar {
     configurations = [project.configurations.shadowCommon]
+    configurations.each { configuration ->
+        configuration.each {
+            from(zipTree(it.absolutePath)) {
+                exclude "META-INF/**"
+            }
+        }
+    }
     classifier "dev-shadow"
 }
 
@@ -51,14 +62,15 @@ remapJar {
     classifier null
 }
 
-tasks.register('renameJarForPublication', Zip) {
-    dependsOn remapJar
+task renameJarForPublication(type: Zip, dependsOn: remapJar) {
     from remapJar.archiveFile.map { zipTree(it) }
     extension "jar"
     metadataCharset "UTF-8"
     destinationDirectory = base.libsDirectory
     classifier project.name
 }
+
+assemble.dependsOn renameJarForPublication
 
 jar {
     classifier "dev"
@@ -75,6 +87,7 @@ components.java {
         skip()
     }
 }
+
 unifiedPublishing {
     project {
         displayName = "[Fabric $rootProject.supported_version] v$project.version"

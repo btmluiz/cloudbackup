@@ -1,6 +1,5 @@
 modLoader = "javafml"
 loaderVersion = "[38,)"
-# Review your options at https://choosealicense.com/. All rights reserved is the default copyright stance, and is thus the default here.
 license = "GNU GPL 3.0"
 issueTrackerURL = "https://github.com/btmluiz/cloudbackup/issues"
 [[mods]]
@@ -8,11 +7,13 @@ modId = "cloudbackup"
 version = "${version}"
 displayName = "cloudbackup"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/cloudbackup"
-logoFile = "icon.png" #optional
+logoFile = "icon.png"
 authors="Luiz Braga"
 #displayTest="MATCH_VERSION" # MATCH_VERSION is the default if nothing is specified (#optional)
 description = '''
-
+Automatically back up your Minecraft world and upload it to cloud services like Google Drive and Dropbox with CloudBackup.
+This mod features customizable settings for enabling/disabling backups and automatic uploads.
+Keep your Minecraft world safe and secure with CloudBackup.
 '''
 [[dependencies.cloudbackup]]
 modId = "forge"
