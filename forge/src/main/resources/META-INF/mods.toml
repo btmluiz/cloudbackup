@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[38,)"
+loaderVersion = "[41,)"
 license = "GNU GPL 3.0"
 issueTrackerURL = "https://github.com/btmluiz/cloudbackup/issues"
 [[mods]]
@@ -18,12 +18,12 @@ Keep your Minecraft world safe and secure with CloudBackup.
 [[dependencies.cloudbackup]]
 modId = "forge"
 mandatory = true
-versionRange = "[38,)"
+versionRange = "[41,)"
 ordering = "NONE"
 side = "CLIENT"
 [[dependencies.cloudbackup]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.18,1.19)"
+versionRange = "[1.19,1.20)"
 ordering = "NONE"
 side = "CLIENT"

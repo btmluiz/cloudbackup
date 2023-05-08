@@ -1,4 +1,4 @@
-name: Build and release (1.16)
+name: Build and release (1.19)
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
       - '**.gradle'
       - '**.properties'
     branches:
-      - 1.18
+      - 1.19
 
 jobs:
   build:

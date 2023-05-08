@@ -12,7 +12,6 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +22,7 @@ import java.security.GeneralSecurityException;
 public class GoogleDriveConfigureScreen extends AbstractStorageConfigureScreen {
 
     public final GoogleDriveStorage googleDrive;
-    public static Component TITLE = new TranslatableComponent("gd_screen.title");
+    public static Component TITLE = Component.translatable("gd_screen.title");
     public static final Logger LOGGER = LogManager.getLogger();
 
     private Component loginStatus;
@@ -54,7 +53,7 @@ public class GoogleDriveConfigureScreen extends AbstractStorageConfigureScreen {
     }
 
     protected void init() {
-        connectButton = addRenderableWidget(new Button(width / 2 - 155, height / 6 + 48 - 6, 150, 20, new TranslatableComponent("cloudbackup.storage.open_browser"), (button -> {
+        connectButton = addRenderableWidget(new Button(width / 2 - 155, height / 6 + 48 - 6, 150, 20, Component.translatable("cloudbackup.storage.open_browser"), (button -> {
             try {
                 String driveUrl = googleDrive.getBrowserUrl();
 
@@ -67,7 +66,7 @@ public class GoogleDriveConfigureScreen extends AbstractStorageConfigureScreen {
         })));
 
         // Logout button
-        disconnectButton = addRenderableWidget(new Button(width / 2 - 155 + 160, height / 6 + 48 - 6, 150, 20, new TranslatableComponent("cloudbackup.storage.disconnect"), (button -> {
+        disconnectButton = addRenderableWidget(new Button(width / 2 - 155 + 160, height / 6 + 48 - 6, 150, 20, Component.translatable("cloudbackup.storage.disconnect"), (button -> {
             try {
                 googleDrive.disconnect();
                 authUser = null;
@@ -77,14 +76,14 @@ public class GoogleDriveConfigureScreen extends AbstractStorageConfigureScreen {
         })));
 
         // Upload folder
-        uploadFolderEditBox = new EditBox(font, width / 2 - 155, height / 6 + 72 - 6, 150, 20, new TranslatableComponent("cloudbackup.storage.upload_folder"));
+        uploadFolderEditBox = new EditBox(font, width / 2 - 155, height / 6 + 72 - 6, 150, 20, Component.translatable("cloudbackup.storage.upload_folder"));
         uploadFolderEditBox.setValue(config.googleDrive.uploadDir);
         uploadFolderEditBox.setResponder(string -> config.googleDrive.uploadDir = string);
 
         addWidget(uploadFolderEditBox);
 
         // Make world folder button
-        makeWorldFolderButton = addRenderableWidget(new Button(width / 2 - 155 + 160, height / 6 + 72 - 6, 150, 20, new TranslatableComponent("cloudbackup.storage.make_world_folder"), (button -> config.googleDrive.makeWorldDir = !config.googleDrive.makeWorldDir)));
+        makeWorldFolderButton = addRenderableWidget(new Button(width / 2 - 155 + 160, height / 6 + 72 - 6, 150, 20, Component.translatable("cloudbackup.storage.make_world_folder"), (button -> config.googleDrive.makeWorldDir = !config.googleDrive.makeWorldDir)));
 
         addRenderableWidget(new Button(this.width / 2 - 100, this.height / 6 + 168, 200, 20, CommonComponents.GUI_DONE, button -> popScreen()));
     }
@@ -103,12 +102,12 @@ public class GoogleDriveConfigureScreen extends AbstractStorageConfigureScreen {
                     authUser = googleDrive.getDriveService().about().get().setFields("user").execute().getUser();
                     LOGGER.info("Drive User: " + authUser);
                 }
-                loginStatus = new TranslatableComponent("cloudbackup.storage.google_drive.logged_as", authUser.getDisplayName(), authUser.getEmailAddress());
+                loginStatus = Component.translatable("cloudbackup.storage.google_drive.logged_as", authUser.getDisplayName(), authUser.getEmailAddress());
             } catch (IOException | GeneralSecurityException e) {
                 LOGGER.error("Could not get user info", e);
             }
         } else {
-            loginStatus = new TranslatableComponent("cloudbackup.storage.not_connected");
+            loginStatus = Component.translatable("cloudbackup.storage.not_connected");
         }
     }
 

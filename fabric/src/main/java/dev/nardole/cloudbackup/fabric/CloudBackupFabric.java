@@ -3,7 +3,7 @@ package dev.nardole.cloudbackup.fabric;
 import dev.nardole.cloudbackup.CloudBackup;
 import dev.nardole.cloudbackup.threads.BackupThread;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.MinecraftServer;
@@ -33,7 +33,7 @@ public class CloudBackupFabric implements ModInitializer {
             }
         });
 
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(Commands.literal("cloudbackup")
+        CommandRegistrationCallback.EVENT.register((dispatcher, buildContext, selection) -> dispatcher.register(Commands.literal("cloudbackup")
                 .requires(source -> source.getServer().isSingleplayer() || source.hasPermission(2))
                 .then(Commands.literal("run")
                         .executes(context -> {

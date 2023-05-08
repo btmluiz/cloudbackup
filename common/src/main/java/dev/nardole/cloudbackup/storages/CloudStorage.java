@@ -1,7 +1,6 @@
 package dev.nardole.cloudbackup.storages;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public enum CloudStorage {
     GOOGLE_DRIVE("google_drive", GoogleDriveStorage.class);
@@ -23,6 +22,6 @@ public enum CloudStorage {
     }
 
     public Component getDisplayName() {
-        return new TranslatableComponent("cloudbackup.storage." + this.name);
+        return Component.translatable("cloudbackup.storage." + this.name);
     }
 }

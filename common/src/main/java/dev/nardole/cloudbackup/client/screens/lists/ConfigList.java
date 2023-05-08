@@ -14,8 +14,6 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,31 +28,31 @@ public class ConfigList extends ContainerObjectSelectionList<ConfigList.Entry> {
 
         int cellWidth = getCellWidth();
 
-        Button enableBackupButton = new Button(0, 0, cellWidth, 20, TextComponent.EMPTY, button -> mainConfig.enableBackup = !mainConfig.enableBackup) {
+        Button enableBackupButton = new Button(0, 0, cellWidth, 20, Component.empty(), button -> mainConfig.enableBackup = !mainConfig.enableBackup) {
             @Override
             public Component getMessage() {
-                return new TranslatableComponent("options.generic_value", new TranslatableComponent("cloudbackup.enable_backup"), new TranslatableComponent(mainConfig.enableBackup ? "options.on" : "options.off"));
+                return Component.translatable("options.generic_value", Component.translatable("cloudbackup.enable_backup"), Component.translatable(mainConfig.enableBackup ? "options.on" : "options.off"));
             }
         };
 
-        Button autoBackupButton = new Button(0, 0, cellWidth, 20, TextComponent.EMPTY, button -> mainConfig.autoBackup = !mainConfig.autoBackup) {
+        Button autoBackupButton = new Button(0, 0, cellWidth, 20, Component.empty(), button -> mainConfig.autoBackup = !mainConfig.autoBackup) {
             @Override
             public Component getMessage() {
-                return new TranslatableComponent("options.generic_value", new TranslatableComponent("cloudbackup.auto_backup"), new TranslatableComponent(mainConfig.autoBackup ? "options.on" : "options.off"));
+                return Component.translatable("options.generic_value", Component.translatable("cloudbackup.auto_backup"), Component.translatable(mainConfig.autoBackup ? "options.on" : "options.off"));
             }
         };
 
-        Button backupWhenExitButton = new Button(0, 0, cellWidth, 20, TextComponent.EMPTY, button -> mainConfig.backupWhenExit = !mainConfig.backupWhenExit) {
+        Button backupWhenExitButton = new Button(0, 0, cellWidth, 20, Component.empty(), button -> mainConfig.backupWhenExit = !mainConfig.backupWhenExit) {
             @Override
             public Component getMessage() {
-                return new TranslatableComponent("options.generic_value", new TranslatableComponent("cloudbackup.backup_when_exit"), new TranslatableComponent(mainConfig.backupWhenExit ? "options.on" : "options.off"));
+                return Component.translatable("options.generic_value", Component.translatable("cloudbackup.backup_when_exit"), Component.translatable(mainConfig.backupWhenExit ? "options.on" : "options.off"));
             }
         };
 
-        Button broadCastBackupMessageButton = new Button(0, 0, cellWidth, 20, TextComponent.EMPTY, button -> mainConfig.broadCastBackupMessage = !mainConfig.broadCastBackupMessage) {
+        Button broadCastBackupMessageButton = new Button(0, 0, cellWidth, 20, Component.empty(), button -> mainConfig.broadCastBackupMessage = !mainConfig.broadCastBackupMessage) {
             @Override
             public Component getMessage() {
-                return new TranslatableComponent("options.generic_value", new TranslatableComponent("cloudbackup.broadCastBackupMessage"), new TranslatableComponent(mainConfig.broadCastBackupMessage ? "options.on" : "options.off"));
+                return Component.translatable("options.generic_value", Component.translatable("cloudbackup.broadCastBackupMessage"), Component.translatable(mainConfig.broadCastBackupMessage ? "options.on" : "options.off"));
             }
         };
 
@@ -136,17 +134,17 @@ public class ConfigList extends ContainerObjectSelectionList<ConfigList.Entry> {
 
             int cellWidth = getCellWidth();
 
-            this.button1 = new Button(0, 0, cellWidth, 20, TextComponent.EMPTY, button -> {
+            this.button1 = new Button(0, 0, cellWidth, 20, Component.empty(), button -> {
                 LOGGER.info(storage.getName() + " enableButton: " + (config.enabled ? "on" : "off"));
                 config.enabled = !config.enabled;
             }) {
                 @Override
                 public Component getMessage() {
-                    return new TranslatableComponent("options.generic_value", new TranslatableComponent("cloudbackup.upload"), new TranslatableComponent("options." + (config.enabled ? "on" : "off")));
+                    return Component.translatable("options.generic_value", Component.translatable("cloudbackup.upload"), Component.translatable("options." + (config.enabled ? "on" : "off")));
                 }
             };
 
-            this.button2 = new Button(0, 0, cellWidth, 20, new TranslatableComponent("cloudbackup.configure"), button -> minecraft.setScreen(configScreen));
+            this.button2 = new Button(0, 0, cellWidth, 20, Component.translatable("cloudbackup.configure"), button -> minecraft.setScreen(configScreen));
         }
     }
 

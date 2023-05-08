@@ -9,11 +9,10 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public class CloudScreen extends Screen {
 
-    public static Component TITLE = new TranslatableComponent("cloudbackup.title");
+    public static Component TITLE = Component.translatable("cloudbackup.title");
 
     private ConfigList configList;
 
@@ -30,7 +29,7 @@ public class CloudScreen extends Screen {
         configList = new ConfigList(this, this.minecraft, mainConfig);
         addWidget(this.configList);
 
-        addRenderableWidget(new Button(this.width / 2 - 155, this.height - 29, 150, 20, new TranslatableComponent("cloudbackup.save"), button -> {
+        addRenderableWidget(new Button(this.width / 2 - 155, this.height - 29, 150, 20, Component.translatable("cloudbackup.save"), button -> {
             ConfigHandler.saveConfig(mainConfig);
             CloudBackup.reloadConfig();
             assert this.minecraft != null;

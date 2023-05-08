@@ -61,7 +61,7 @@ public class GoogleDriveStorage implements IStorage {
     public GoogleDriveStorage() throws GeneralSecurityException, IOException {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
-        InputStream gcp_credentials = Minecraft.getInstance().getResourceManager().getResource(CREDENTIALS).getInputStream();
+        InputStream gcp_credentials = Minecraft.getInstance().getResourceManager().open(CREDENTIALS);
         InputStreamReader gcp_reader = new InputStreamReader(gcp_credentials);
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, gcp_reader);
         authorizationCodeFlow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
