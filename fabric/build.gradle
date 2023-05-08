@@ -24,12 +24,12 @@ dependencies {
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 
-    shadowCommon('com.google.auth:google-auth-library-oauth2-http:1.11.0')
-    shadowCommon('com.google.api-client:google-api-client:2.0.0')
-    shadowCommon('com.google.oauth-client:google-oauth-client-jetty:1.34.1')
-    shadowCommon('com.google.apis:google-api-services-drive:v3-rev20220815-2.0.0')
-    shadowCommon('com.dropbox.core:dropbox-core-sdk:5.4.4')
-    shadowCommon('org.yaml:snakeyaml:2.0') { transitive = false }
+    shadowCommon minecraftLibraries('com.google.auth:google-auth-library-oauth2-http:1.11.0')
+    shadowCommon minecraftLibraries('com.google.api-client:google-api-client:2.0.0')
+    shadowCommon minecraftLibraries('com.google.oauth-client:google-oauth-client-jetty:1.34.1')
+    shadowCommon minecraftLibraries('com.google.apis:google-api-services-drive:v3-rev20220815-2.0.0')
+    shadowCommon minecraftLibraries('com.dropbox.core:dropbox-core-sdk:5.4.4')
+    shadowCommon minecraftLibraries('org.yaml:snakeyaml:2.0') { transitive = false }
 }
 
 processResources {
@@ -46,13 +46,24 @@ processResources {
 
 shadowJar {
     configurations = [project.configurations.shadowCommon]
-    configurations.each { configuration ->
-        configuration.each {
-            from(zipTree(it.absolutePath)) {
-                exclude "META-INF/**"
-            }
-        }
+    exclude("org/apache/**")
+    exclude("javax/**")
+
+    minimize {
+        exclude(project(":common"))
+        exclude(dependency("org.yaml:snakeyaml:.*"))
+        exclude(dependency(group: "com.google", name: ".*"))
+        exclude(dependency(group: "com.google.api-client", name: ".*"))
+        exclude(dependency(group: "com.google.oauth-client", name: ".*"))
+        exclude(dependency(group: "com.google.apis", name: ".*"))
     }
+
+    relocate("com.google", "shadow.google")
+    relocate("com.dropbox", "shadow.dropbox")
+    relocate("org.yaml", "shadow.yaml")
+    relocate("org.checkerframework", "shadow.checkerframework")
+    relocate("io.grpc", "shadow.io.grpc")
+    relocate("io.opencensus", "shadow.io.opencensus")
     classifier "dev-shadow"
 }
 

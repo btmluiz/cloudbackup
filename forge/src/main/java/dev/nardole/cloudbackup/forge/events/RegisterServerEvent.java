@@ -7,14 +7,14 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
-import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraftforge.event.server.ServerStoppedEvent;
 
 @Mod.EventBusSubscriber
 public class RegisterServerEvent {
 
     @SubscribeEvent
-    public void onServerStarted(FMLServerStartedEvent event) {
+    public void onServerStarted(ServerStartedEvent event) {
         MinecraftServer server = event.getServer();
 
         server.addTickable(() -> {
@@ -31,7 +31,7 @@ public class RegisterServerEvent {
     }
 
     @SubscribeEvent
-    public void onServerStopped(FMLServerStoppedEvent event) {
+    public void onServerStopped(ServerStoppedEvent event) {
         if (CloudBackup.getConfig().backupWhenExit) {
             MinecraftServer server = event.getServer();
             boolean done = BackupThread.tryCreateBackup(server);
