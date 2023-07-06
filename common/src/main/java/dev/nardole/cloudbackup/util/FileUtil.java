@@ -13,8 +13,6 @@ public class FileUtil {
     private static final Pattern COPY_COUNTER_PATTERN = Pattern.compile("(<name>.*) \\((<count>\\d*)\\)", 66);
     private static final Pattern RESERVED_WINDOWS_FILENAMES = Pattern.compile(".*\\.|(?:COM|CLOCK\\$|CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(?:\\..*)?", 2);
 
-
-
     public static String findAvailableName(Path path, String string, String string2) throws IOException {
         char[] var3 = SharedConstants.ILLEGAL_FILE_CHARACTERS;
         int i = var3.length;

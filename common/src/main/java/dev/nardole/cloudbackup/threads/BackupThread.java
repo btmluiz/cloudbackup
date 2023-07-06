@@ -1,7 +1,7 @@
 package dev.nardole.cloudbackup.threads;
 
 import dev.nardole.cloudbackup.CloudBackup;
-import dev.nardole.cloudbackup.config.MainConfig;
+import dev.nardole.cloudbackup.config.CloudBackupConfig;
 import dev.nardole.cloudbackup.data.BackupData;
 import dev.nardole.cloudbackup.storages.CloudStorage;
 import dev.nardole.cloudbackup.storages.IStorage;
@@ -13,8 +13,6 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.storage.LevelResource;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedOutputStream;
@@ -71,7 +69,7 @@ public class BackupThread extends Thread {
     public static boolean tryCreateBackup(MinecraftServer server) {
         BackupData backupData = BackupData.get(server);
 
-        if (CloudBackup.getConfig().enableBackup && !backupData.isPaused() && System.currentTimeMillis() - CloudBackup.getConfig().getTimer() > backupData.getLastSaved()) {
+        if (CloudBackup.loadConfig().enableBackup && !backupData.isPaused() && System.currentTimeMillis() - CloudBackup.loadConfig().getTimer() > backupData.getLastSaved()) {
             BackupThread thread = new BackupThread(server, false, backupData);
             thread.start();
             backupData.updateSaveTime(System.currentTimeMillis());
@@ -96,22 +94,22 @@ public class BackupThread extends Thread {
 
     @Override
     public void run() {
-        if (CloudBackup.getConfig().enableBackup) {
+        if (CloudBackup.loadConfig().enableBackup) {
             try {
                 this.deleteFiles();
 
-                Files.createDirectories(CloudBackup.getConfig().getOutputPath());
+                Files.createDirectories(CloudBackup.loadConfig().getOutputPath());
                 long start = System.currentTimeMillis();
-                this.broadcast("backup_started", Style.EMPTY.withColor(ChatFormatting.GOLD));
+                this.broadcast("cloudbackup.messages.backup_started", Style.EMPTY.withColor(ChatFormatting.GOLD));
                 this.makeWorldBackup();
                 long end = System.currentTimeMillis();
                 String time = Timer.getTimer(end - start);
-                this.broadcast("backup_finished", Style.EMPTY.withColor(ChatFormatting.GOLD), time);
+                this.broadcast("cloudbackup.messages.backup_finished", Style.EMPTY.withColor(ChatFormatting.GOLD), time);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
-            this.broadcast("backup_disabled", Style.EMPTY.withColor(ChatFormatting.RED));
+            this.broadcast("cloudbackup.messages.backup_disabled", Style.EMPTY.withColor(ChatFormatting.RED));
         }
     }
 
@@ -131,7 +129,7 @@ public class BackupThread extends Thread {
 
     private void makeWorldBackup() throws IOException {
         String fileName = this.server.getWorldData().getLevelName() + "_" + LocalDateTime.now().format(FORMATTER);
-        Path path = CloudBackup.getConfig().getOutputPath();
+        Path path = CloudBackup.loadConfig().getOutputPath();
 
         try {
             Files.createDirectories(Files.exists(path) ? path.toAbsolutePath() : path);
@@ -180,7 +178,7 @@ public class BackupThread extends Thread {
     }
 
     private void tryUploadBackup(String fileName, String worldName, Path outputFile) {
-        MainConfig config = CloudBackup.getConfig();
+        CloudBackupConfig config = CloudBackup.loadConfig();
 
         for (CloudStorage storage: CloudStorage.values()) {
             if (config.getStorageConfig(storage).enabled) {

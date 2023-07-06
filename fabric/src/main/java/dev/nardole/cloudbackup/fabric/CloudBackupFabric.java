@@ -16,7 +16,7 @@ public class CloudBackupFabric implements ModInitializer {
         ServerLifecycleEvents.SERVER_STARTED.register(server -> server.addTickable(() -> {
             if (!server.getPlayerList().getPlayers().isEmpty()
                     && server.isSingleplayer()
-                    && CloudBackup.getConfig().autoBackup) {
+                    && CloudBackup.loadConfig().autoBackup) {
                 boolean done = BackupThread.tryCreateBackup(server);
 
                 if (done) {
@@ -45,7 +45,7 @@ public class CloudBackupFabric implements ModInitializer {
                         .executes(context -> {
                             MinecraftServer server = context.getSource().getServer();
 
-                            context.getSource().sendSuccess(BackupThread.getLastBackupDateFormatted(server), false);
+                            context.getSource().sendSuccess(() -> BackupThread.getLastBackupDateFormatted(server), false);
                             return 1;
                         }))));
     }

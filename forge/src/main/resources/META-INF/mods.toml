@@ -24,6 +24,12 @@ side = "CLIENT"
 [[dependencies.cloudbackup]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.19,1.20)"
+versionRange = "[1.20,1.21)"
+ordering = "NONE"
+side = "CLIENT"
+[[dependencies.cloudbackup]]
+modId = "cloth_config"
+mandatory = true
+versionRange = "[9,)"
 ordering = "NONE"
 side = "CLIENT"

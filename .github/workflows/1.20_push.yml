@@ -1,13 +1,14 @@
-name: Build and release (1.19)
+name: Build and release (1.20)
 
 on:
   push:
     paths:
+      - '.github/workflows/**'
       - 'src/**'
       - '**.gradle'
       - '**.properties'
     branches:
-      - "1.19"
+      - "1.20"
 
 jobs:
   build:

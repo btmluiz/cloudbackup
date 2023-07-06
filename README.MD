@@ -25,6 +25,8 @@ CloudBackup uses the following libraries:
 - [Archtecury](https://github.com/Archtecury/Archtecury)
 - [Forge](https://github.com/MinecraftForge/MinecraftForge)
 - [Fabric](https://github.com/FabricMC/fabric)
+- [Cloth Config API](https://github.com/shedaniel/ClothConfig/)
+- [Mod Menu](https://github.com/TerraformersMC/ModMenu)
 - [Google Drive Java SDK](https://developers.google.com/drive)
 - [Dropbox Java SDK](https://github.com/dropbox/dropbox-sdk-java)
 
@@ -34,6 +36,8 @@ CloudBackup is licensed under the [GNU General Public License v3.0](https://www.
 
 ## Donate
 If you find CloudBackup useful and would like to support its development, you can donate via PayPal. Any amount is appreciated and will go towards improving the mod.
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/nardole)
 
 [![PayPal Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate?hosted_button_id=UR9UB5FNVDVTU)
 

@@ -10,13 +10,12 @@ import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.representer.Representer;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+@Deprecated(since = "1.0.7")
 public class ConfigHandler {
 
     private static String getFileName(Class<?> configClass) {
@@ -53,7 +52,7 @@ public class ConfigHandler {
         Path path = getModConfigDir().resolve(fileName);
 
         if (!path.toFile().exists()) {
-            return loadDefaultConfig(configClass);
+            return null;
         }
 
         LoaderOptions options = new LoaderOptions();
@@ -63,44 +62,6 @@ public class ConfigHandler {
         try {
             InputStream inputStream = Files.newInputStream(path.toFile().toPath());
             return yaml.load(inputStream);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static <T> T loadDefaultConfig(Class<T> configClass) {
-        try {
-            T config = configClass.getDeclaredConstructor().newInstance();
-            saveConfig(config);
-            return config;
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                 NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static <T> void saveConfig(T configClass) {
-        String fileName = getFileName(configClass.getClass());
-        Path path = getModConfigDir().resolve(fileName);
-
-
-        try {
-            if (!path.toFile().exists() && !path.toFile().createNewFile()) {
-                throw new RuntimeException("Failed to create config file");
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            DumperOptions options = new DumperOptions();
-            options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-            options.setPrettyFlow(true);
-
-            Representer representer = getRepresenter(configClass.getClass(), options);
-
-            Yaml yaml = new Yaml(representer, options);
-            yaml.dump(configClass, new FileWriter(path.toFile()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

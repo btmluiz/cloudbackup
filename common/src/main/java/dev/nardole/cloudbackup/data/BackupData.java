@@ -3,7 +3,6 @@ package dev.nardole.cloudbackup.data;
 import dev.nardole.cloudbackup.CloudBackup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,10 +39,6 @@ public class BackupData extends SavedData {
 
     public boolean isPaused() {
         return paused;
-    }
-
-    public void setPaused(boolean paused) {
-        this.paused = paused;
     }
 
     public long getLastSaved() {

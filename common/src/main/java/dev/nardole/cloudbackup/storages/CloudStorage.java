@@ -13,10 +13,6 @@ public enum CloudStorage {
         this.storage = storage;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public Class<? extends IStorage> getStorage() {
         return storage;
     }

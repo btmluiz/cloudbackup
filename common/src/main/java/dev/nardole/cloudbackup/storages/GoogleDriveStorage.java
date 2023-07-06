@@ -18,7 +18,7 @@ import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.google.common.collect.ImmutableList;
 import dev.nardole.cloudbackup.CloudBackup;
-import dev.nardole.cloudbackup.config.MainConfig;
+import dev.nardole.cloudbackup.config.CloudBackupConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
@@ -100,7 +100,7 @@ public class GoogleDriveStorage implements IStorage {
             try {
                 service = this.getDriveService();
 
-                MainConfig.StorageConfig config = CloudBackup.getConfig().googleDrive;
+                CloudBackupConfig.StorageConfig config = CloudBackup.loadConfig().googleDrive;
                 String folderId = getFolderId(service, config.uploadDir);
 
 

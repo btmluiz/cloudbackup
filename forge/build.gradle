@@ -26,6 +26,8 @@ configurations {
 dependencies {
     forge "net.minecraftforge:forge:${rootProject.forge_version}"
 
+    modImplementation("me.shedaniel.cloth:cloth-config-forge:${rootProject.cloth_config_version}")
+
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 
@@ -114,6 +116,15 @@ unifiedPublishing {
             curseforge {
                 token = CF_API_KEY
                 id = rootProject.curseforge_id
+                gameVersions.addAll("Java 16", "Forge")
+            }
+        }
+
+        var MR_API_KEY = project.findProperty("MR_API_KEY") ?: System.getenv("MR_API_KEY")
+        if (MR_API_KEY != null) {
+            modrinth {
+                token = MR_API_KEY
+                id = rootProject.modrinth_id
                 gameVersions.addAll("Java 16", "Forge")
             }
         }

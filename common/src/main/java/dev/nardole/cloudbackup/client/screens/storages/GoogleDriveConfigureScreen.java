@@ -1,14 +1,10 @@
 package dev.nardole.cloudbackup.client.screens.storages;
 
 import com.google.api.services.drive.model.User;
-import com.mojang.blaze3d.vertex.PoseStack;
-import dev.nardole.cloudbackup.CloudBackup;
-import dev.nardole.cloudbackup.config.ConfigHandler;
-import dev.nardole.cloudbackup.config.MainConfig;
 import dev.nardole.cloudbackup.storages.GoogleDriveStorage;
 import net.minecraft.Util;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -22,7 +18,7 @@ import java.security.GeneralSecurityException;
 public class GoogleDriveConfigureScreen extends AbstractStorageConfigureScreen {
 
     public final GoogleDriveStorage googleDrive;
-    public static Component TITLE = Component.translatable("gd_screen.title");
+    public static Component TITLE = Component.translatable("cloudbackup.messages.gd_screen.title");
     public static final Logger LOGGER = LogManager.getLogger();
 
     private Component loginStatus;
@@ -31,13 +27,7 @@ public class GoogleDriveConfigureScreen extends AbstractStorageConfigureScreen {
 
     private Button disconnectButton;
 
-    private EditBox uploadFolderEditBox;
-
-    private Button makeWorldFolderButton;
-
     private User authUser;
-
-    private final MainConfig config = CloudBackup.getConfig().clone();
 
     public GoogleDriveConfigureScreen(Screen lastScreen) {
         super(TITLE, lastScreen);
@@ -53,7 +43,7 @@ public class GoogleDriveConfigureScreen extends AbstractStorageConfigureScreen {
     }
 
     protected void init() {
-        connectButton = addRenderableWidget(new Button(width / 2 - 155, height / 6 + 48 - 6, 150, 20, Component.translatable("cloudbackup.storage.open_browser"), (button -> {
+        connectButton = addRenderableWidget(Button.builder(Component.translatable("cloudbackup.storage.open_browser"), (button -> {
             try {
                 String driveUrl = googleDrive.getBrowserUrl();
 
@@ -63,35 +53,23 @@ public class GoogleDriveConfigureScreen extends AbstractStorageConfigureScreen {
             } catch (Exception e) {
                 LOGGER.error("Could not get authorization url", e);
             }
-        })));
+        })).bounds(width / 2 - 155, height / 6 + 48 - 6, 150, 20).build());
 
         // Logout button
-        disconnectButton = addRenderableWidget(new Button(width / 2 - 155 + 160, height / 6 + 48 - 6, 150, 20, Component.translatable("cloudbackup.storage.disconnect"), (button -> {
+        disconnectButton = addRenderableWidget(Button.builder(Component.translatable("cloudbackup.storage.disconnect"), (button -> {
             try {
                 googleDrive.disconnect();
                 authUser = null;
             } catch (Exception e) {
                 LOGGER.error("Could not logout", e);
             }
-        })));
+        })).bounds(width / 2 - 155 + 160, height / 6 + 48 - 6, 150, 20).build());
 
-        // Upload folder
-        uploadFolderEditBox = new EditBox(font, width / 2 - 155, height / 6 + 72 - 6, 150, 20, Component.translatable("cloudbackup.storage.upload_folder"));
-        uploadFolderEditBox.setValue(config.googleDrive.uploadDir);
-        uploadFolderEditBox.setResponder(string -> config.googleDrive.uploadDir = string);
-
-        addWidget(uploadFolderEditBox);
-
-        // Make world folder button
-        makeWorldFolderButton = addRenderableWidget(new Button(width / 2 - 155 + 160, height / 6 + 72 - 6, 150, 20, Component.translatable("cloudbackup.storage.make_world_folder"), (button -> config.googleDrive.makeWorldDir = !config.googleDrive.makeWorldDir)));
-
-        addRenderableWidget(new Button(this.width / 2 - 100, this.height / 6 + 168, 200, 20, CommonComponents.GUI_DONE, button -> popScreen()));
+        addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, button -> popScreen()).bounds(this.width / 2 - 100, this.height / 6 + 168, 200, 20).build());
     }
 
     @Override
     public void popScreen() {
-        ConfigHandler.saveConfig(config);
-        CloudBackup.reloadConfig();
         super.popScreen();
     }
 
@@ -112,24 +90,19 @@ public class GoogleDriveConfigureScreen extends AbstractStorageConfigureScreen {
     }
 
     @Override
-    public void render(@NotNull PoseStack arg, int i, int j, float f) {
+    public void render(@NotNull GuiGraphics graphics, int i, int j, float f) {
         if (googleDrive.isConnected()) {
             connectButton.active = false;
             disconnectButton.active = true;
-            uploadFolderEditBox.active = true;
-            makeWorldFolderButton.active = true;
         } else {
             connectButton.active = true;
             disconnectButton.active = false;
-            uploadFolderEditBox.active = false;
-            makeWorldFolderButton.active = false;
         }
-        super.render(arg, i, j, f);
-        this.uploadFolderEditBox.render(arg, i, j , f);
+        super.render(graphics, i, j, f);
 
         refreshLoginStatusState();
         if (loginStatus != null) {
-            drawCenteredString(arg, font, loginStatus, this.width / 2, 47, -1);
+            graphics.drawCenteredString(font, loginStatus, this.width / 2, 47, -1);
         }
     }
 }

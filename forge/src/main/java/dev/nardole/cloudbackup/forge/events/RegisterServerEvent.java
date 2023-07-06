@@ -20,7 +20,7 @@ public class RegisterServerEvent {
         server.addTickable(() -> {
             if (!server.getPlayerList().getPlayers().isEmpty()
                     && server.isSingleplayer()
-                    && CloudBackup.getConfig().autoBackup) {
+                    && CloudBackup.loadConfig().autoBackup) {
                 boolean done = BackupThread.tryCreateBackup(server);
 
                 if (done) {
@@ -32,7 +32,7 @@ public class RegisterServerEvent {
 
     @SubscribeEvent
     public void onServerStopped(ServerStoppedEvent event) {
-        if (CloudBackup.getConfig().backupWhenExit) {
+        if (CloudBackup.loadConfig().backupWhenExit) {
             MinecraftServer server = event.getServer();
             boolean done = BackupThread.tryCreateBackup(server);
 
@@ -56,7 +56,7 @@ public class RegisterServerEvent {
                         .executes(context -> {
                             MinecraftServer server = context.getSource().getServer();
 
-                            context.getSource().sendSuccess(BackupThread.getLastBackupDateFormatted(server), false);
+                            context.getSource().sendSuccess(() -> BackupThread.getLastBackupDateFormatted(server), false);
                             return 1;
                         })));
     }

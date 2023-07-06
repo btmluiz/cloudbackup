@@ -6,7 +6,6 @@
   "mixins": [
   ],
   "client": [
-    "client.gui.screens.OptionsScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
