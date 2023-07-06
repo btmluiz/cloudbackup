@@ -46,9 +46,10 @@ jobs:
             !**/*-shadow.jar
             !**/*-transformProduction.jar
             !**/testmod*/
-      - name: Release to CurseForge
+      - name: Release to CurseForge and Modrinth
         uses: gradle/gradle-build-action@v2
         env:
           CF_API_KEY: ${{ secrets.CF_API_KEY }}
+          MR_API_KEY: ${{ secrets.MR_API_KEY }}
         with:
           arguments: publish publishUnified --stacktrace --no-daemon
