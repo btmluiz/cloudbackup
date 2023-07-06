@@ -7,7 +7,7 @@ on:
       - '**.gradle'
       - '**.properties'
     branches:
-      - 1.19
+      - "1.19"
 
 jobs:
   build:
@@ -22,7 +22,7 @@ jobs:
           distribution: 'temurin'
       - name: Generate credentials.json
         run: |
-          echo ${{ secrets.GOOGLE_CREDENTIALS }} > $GITHUB_WORKSPACE/common/src/main/resources/credentials.json
+          echo ${{ secrets.GOOGLE_CREDENTIALS }} > $GITHUB_WORKSPACE/common/src/main/resources/assets/cloudbackup/credentials.json
       - name: Setup and build gradle
         uses: gradle/gradle-build-action@v2
         with:
