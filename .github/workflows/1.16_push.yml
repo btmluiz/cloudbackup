@@ -3,6 +3,7 @@ name: Build and release (1.16)
 on:
   push:
     paths:
+      - '.github/workflows/*'
       - 'src/**'
       - '**.gradle'
       - '**.properties'
