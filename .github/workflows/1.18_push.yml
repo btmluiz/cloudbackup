@@ -7,7 +7,7 @@ on:
       - '**.gradle'
       - '**.properties'
     branches:
-      - "1.18"
+      - 1.18
 
 jobs:
   build:
