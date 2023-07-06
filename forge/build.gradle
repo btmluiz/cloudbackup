@@ -116,7 +116,6 @@ unifiedPublishing {
             curseforge {
                 token = CF_API_KEY
                 id = rootProject.curseforge_id
-                gameVersions.addAll("Java 16", "Forge")
             }
         }
 
@@ -125,7 +124,6 @@ unifiedPublishing {
             modrinth {
                 token = MR_API_KEY
                 id = rootProject.modrinth_id
-                gameVersions.addAll("Java 16", "Forge")
             }
         }
     }
